@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NazeForge — AI Software Development</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#000;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;
+  --white:#f5f5f7;--white2:#d2d2d7;--white3:#a1a1a6;--white4:#6e6e73;
+  --blue:#2997ff;--blue2:#0071e3;
+  --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.06);
+  --nav-h:52px;--radius:18px;
+}
+/* ─── LIGHT THEME ─── */
+body.light{
+  --bg:#ffffff;--bg2:#f5f5f7;--bg3:#e8e8ed;--bg4:#d2d2d7;
+  --white:#1d1d1f;--white2:#3d3d3f;--white3:#6e6e73;--white4:#a1a1a6;
+  --blue:#0071e3;--blue2:#0071e3;
+  --border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.08);
+}
+body.light #nav{background:rgba(255,255,255,0.92)!important;border-bottom:1px solid rgba(0,0,0,0.1)}
+body.light .mega{background:rgba(255,255,255,0.97)!important}
+body.light .btn-outline{border-color:rgba(0,0,0,0.25)!important;color:var(--white)!important}
+body.light .btn-outline:hover{border-color:rgba(0,0,0,0.5)!important}
+body.light .form-group input,body.light .form-group select,body.light .form-group textarea{border:1px solid rgba(0,0,0,.15)!important}
+body.light .hero::before{background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(0,113,227,.07),transparent 60%),radial-gradient(ellipse 40% 30% at 80% 60%,rgba(0,113,227,.03),transparent 50%)!important}
+body.light .mock-bar{background:#1a1a1a!important}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--white);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ─── PAGE SYSTEM ─── */
+.page{display:none;min-height:100vh;padding-top:var(--nav-h)}
+.page.active{display:block}
+
+/* ─── NAV ─── */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  height:var(--nav-h);
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--border2);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;max-width:1200px;padding:0 22px;
+  position:relative;
+}
+.nav-logo{
+  position:absolute;left:22px;
+  font-size:.95rem;font-weight:600;letter-spacing:-.02em;
+  color:var(--white);text-decoration:none;cursor:pointer;
+}
+.nav-links{display:flex;align-items:center;gap:0}
+.nav-item{position:relative}
+.nav-item>a,.nav-item>span{
+  color:var(--white3);text-decoration:none;
+  font-size:.78rem;font-weight:400;
+  padding:0 14px;height:var(--nav-h);
+  display:flex;align-items:center;cursor:pointer;
+  transition:color .15s;white-space:nowrap;
+  letter-spacing:.01em;
+}
+.nav-item>a:hover,.nav-item>span:hover{color:var(--white)}
+.nav-right{position:absolute;right:22px;display:flex;align-items:center;gap:16px}
+.nav-icon{color:var(--white3);cursor:pointer;font-size:1rem;transition:color .15s}
+.nav-icon:hover{color:var(--white)}
+.nav-cta-btn{
+  background:var(--blue2);color:#fff;
+  padding:6px 16px;border-radius:980px;
+  font-size:.75rem;font-weight:500;
+  text-decoration:none;cursor:pointer;
+  transition:background .15s;white-space:nowrap;
+}
+.nav-cta-btn:hover{background:#0077ed}
+
+/* ─── MEGA MENU ─── */
+.mega{
+  position:fixed;top:var(--nav-h);left:0;right:0;
+  background:rgba(0,0,0,0.95);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--border2);box-shadow:0 1px 0 rgba(0,0,0,0.08);
+  padding:40px 60px;
+  display:none;z-index:9998;
+  grid-template-columns:repeat(4,1fr);gap:40px;
+}
+.mega.open{display:grid}
+.mega-col h5{
+  font-size:.68rem;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--white4);
+  margin-bottom:20px;padding-bottom:12px;
+  border-bottom:1px solid var(--border2);
+}
+.mega-col a,.mega-col span{
+  display:block;font-size:.9rem;color:var(--white2);
+  text-decoration:none;cursor:pointer;
+  padding:6px 0;
+  transition:color .15s;font-weight:400;
+}
+.mega-col a:hover,.mega-col span:hover{color:var(--white)}
+.mega-col a.sub,.mega-col span.sub{
+  font-size:.78rem;color:var(--white4);padding:3px 0;
+}
+.mega-col a.sub:hover,.mega-col span.sub:hover{color:var(--white2)}
+
+/* ─── TICKER ─── */
+.ticker-wrap{
+  background:var(--bg2);
+  border-bottom:1px solid var(--border2);
+  overflow:hidden;padding:14px 0;
+  white-space:nowrap;
+}
+.ticker-track{
+  display:inline-flex;gap:0;
+  animation:ticker 30s linear infinite;
+}
+.ticker-track:hover{animation-play-state:paused}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:0 40px;font-size:.8rem;color:var(--white3);
+  font-weight:400;letter-spacing:.02em;
+}
+.ticker-sep{color:var(--white4);font-size:.6rem}
+
+/* ─── HERO ─── */
+.hero{
+  text-align:center;
+  padding:90px 24px 80px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -10%,rgba(41,151,255,.12),transparent 60%),
+    radial-gradient(ellipse 40% 30% at 80% 60%,rgba(41,151,255,.05),transparent 50%);
+}
+.hero-inner{position:relative;z-index:1;max-width:900px;margin:0 auto}
+.hero-eyebrow{
+  font-size:.72rem;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--blue);
+  margin-bottom:22px;
+}
+.hero h1{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;
+  font-size:clamp(3.2rem,7vw,6rem);
+  font-weight:700;letter-spacing:-.05em;
+  line-height:1.02;color:var(--white);
+  margin-bottom:26px;
+}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero-sub{
+  font-size:clamp(1rem,2vw,1.25rem);
+  color:var(--white3);max-width:560px;
+  margin:0 auto 44px;line-height:1.7;font-weight:300;
+}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-fill{
+  background:var(--blue2);color:#fff;
+  padding:13px 28px;border-radius:980px;
+  font-size:.9rem;font-weight:500;
+  text-decoration:none;cursor:pointer;
+  transition:background .15s,transform .15s;display:inline-block;
+}
+.btn-fill:hover{background:#0077ed;transform:scale(1.02)}
+.btn-outline{
+  background:transparent;border:1px solid rgba(255,255,255,0.3);
+  color:var(--white);padding:13px 28px;border-radius:980px;
+  font-size:.9rem;font-weight:500;
+  text-decoration:none;cursor:pointer;
+  transition:border-color .15s;display:inline-block;
+}
+.btn-outline:hover{border-color:rgba(255,255,255,.6)}
+
+/* ─── STATS ─── */
+.stats-bar{
+  background:var(--bg2);
+  border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);
+  display:flex;justify-content:center;gap:clamp(32px,6vw,100px);
+  flex-wrap:wrap;padding:52px 24px;
+}
+.stat-n{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;
+  font-size:clamp(2.2rem,4vw,3rem);font-weight:700;
+  letter-spacing:-.04em;color:var(--white);line-height:1;
+}
+.stat-l{font-size:.78rem;color:var(--white4);margin-top:7px;letter-spacing:.02em}
+
+/* ─── SECTION BASE ─── */
+.sec{padding:100px 24px;max-width:1200px;margin:0 auto}
+.sec-full{padding:100px 0}
+.s-label{
+  font-size:.68rem;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--blue);
+  margin-bottom:12px;display:block;
+}
+.s-title{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;
+  font-size:clamp(2rem,3.5vw,2.8rem);
+  font-weight:700;letter-spacing:-.03em;color:var(--white);margin-bottom:16px;
+}
+.s-body{font-size:.95rem;color:var(--white3);max-width:500px;line-height:1.75}
+.s-head{margin-bottom:60px}
+.tc{text-align:center}.tc .s-body{margin:0 auto}
+
+/* ─── SERVICE TILES ─── */
+.srv-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:2px;background:var(--border2);
+}
+.srv-tile{
+  background:var(--bg2);padding:52px 44px;
+  cursor:pointer;transition:background .2s;display:block;text-decoration:none;
+}
+.srv-tile:hover{background:var(--bg3)}
+.srv-icon{margin-bottom:28px}
+.srv-icon svg{width:40px;height:40px;opacity:.9}
+.srv-tile h3{font-size:1.1rem;font-weight:600;color:var(--white);margin-bottom:12px;letter-spacing:-.01em}
+.srv-tile p{font-size:.85rem;color:var(--white3);line-height:1.7}
+.srv-tile .lnk{display:inline-flex;align-items:center;gap:4px;font-size:.82rem;color:var(--blue);font-weight:500;margin-top:18px}
+
+/* ─── FEATURE LIST ─── */
+.feat-split{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.feat-list{list-style:none}
+.feat-item{
+  display:flex;align-items:flex-start;gap:18px;
+  padding:22px 0;border-bottom:1px solid var(--border2);
+}
+.feat-item:first-child{border-top:1px solid var(--border2)}
+.feat-n{font-size:.68rem;font-weight:600;color:var(--white4);letter-spacing:.06em;min-width:22px;margin-top:3px}
+.feat-item h4{font-size:.92rem;font-weight:600;margin-bottom:5px;color:var(--white)}
+.feat-item p{font-size:.82rem;color:var(--white3);line-height:1.65}
+
+/* visual panel */
+.feat-visual{background:var(--bg2);border-radius:24px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:1px solid var(--border2);overflow:hidden;position:relative}
+.mock-win{position:absolute;inset:28px;background:var(--bg3);border-radius:14px;border:1px solid var(--border2);overflow:hidden;display:flex;flex-direction:column}
+.mock-bar{padding:12px 16px;background:var(--bg4);border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:6px}
+.m-dot{width:10px;height:10px;border-radius:50%}
+.mock-rows{flex:1;padding:20px;display:flex;flex-direction:column;gap:10px}
+.m-row{height:9px;border-radius:5px;background:var(--bg4)}
+.m-row.w100{width:100%}.m-row.w80{width:80%}.m-row.w60{width:60%}.m-row.w40{width:40%}
+.m-row.blue{background:rgba(41,151,255,.18);width:50%}
+
+/* ─── PROCESS ─── */
+.proc-list{display:flex;flex-direction:column}
+.proc-item{display:grid;grid-template-columns:100px 1fr;padding:36px 0;border-bottom:1px solid var(--border2);align-items:start}
+.proc-item:first-child{border-top:1px solid var(--border2)}
+.proc-tag{font-size:.68rem;font-weight:600;color:var(--white4);letter-spacing:.06em;text-transform:uppercase;padding-top:3px}
+.proc-content h3{font-size:1rem;font-weight:600;margin-bottom:7px;color:var(--white)}
+.proc-content p{font-size:.85rem;color:var(--white3);line-height:1.7;max-width:520px}
+
+/* ─── TECH ─── */
+.tech-wrap{background:var(--bg2);padding:100px 24px;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
+.tech-inner{max-width:1200px;margin:0 auto}
+.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border2);margin-top:60px}
+.tech-card{background:var(--bg2);padding:34px 30px}
+.tech-cat-lbl{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--white4);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border2);display:block}
+.pills{display:flex;flex-wrap:wrap;gap:7px}
+.pill{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:5px 12px;font-size:.75rem;color:var(--white3);font-weight:500;transition:border-color .15s,color .15s}
+.pill:hover{border-color:rgba(41,151,255,.4);color:var(--white)}
+
+/* ─── INDUSTRIES GRID ─── */
+.ind-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border2)}
+.ind-tile{background:var(--bg2);padding:34px 28px;transition:background .2s}
+.ind-tile:hover{background:var(--bg3)}
+.ind-name{font-size:.9rem;font-weight:600;color:var(--white);margin-bottom:8px}
+.ind-desc{font-size:.78rem;color:var(--white4);line-height:1.6}
+
+/* ─── CTA BAND ─── */
+.cta-band{background:var(--bg2);border-top:1px solid var(--border2);text-align:center;padding:100px 24px}
+.cta-band h2{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:700;letter-spacing:-.03em;margin-bottom:18px;color:var(--white)}
+.cta-band p{font-size:.95rem;color:var(--white3);max-width:440px;margin:0 auto 40px;line-height:1.75}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ─── FOOTER ─── */
+footer{background:var(--bg);border-top:1px solid var(--border2);padding:60px 24px 32px}
+.ft-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:52px}
+.ft-brand p{font-size:.8rem;color:var(--white4);margin-top:14px;line-height:1.7;max-width:220px}
+.ft-col h5{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:18px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ft-col a,.ft-col span{color:var(--white4);text-decoration:none;font-size:.8rem;cursor:pointer;transition:color .15s;display:block}
+.ft-col a:hover,.ft-col span:hover{color:var(--white)}
+.ft-bottom{max-width:1200px;margin:0 auto;border-top:1px solid var(--border2);padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--white4)}
+
+/* ─── SERVICE PAGE ─── */
+.sp-hero{padding:80px 24px 60px;max-width:860px;margin:0 auto;text-align:center}
+.sp-hero h1{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:700;letter-spacing:-.04em;color:var(--white);margin-bottom:22px}
+.sp-hero p{font-size:1.05rem;color:var(--white3);max-width:540px;margin:0 auto 38px;line-height:1.75}
+.sp-divider{height:1px;background:var(--border2)}
+.sp-body{max-width:1200px;margin:0 auto;padding:80px 24px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border2)}
+.feat-card{background:var(--bg2);padding:36px 30px}
+.feat-card h4{font-size:.95rem;font-weight:600;margin-bottom:10px;color:var(--white)}
+.feat-card p{font-size:.82rem;color:var(--white3);line-height:1.7}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px}
+.uc-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border2);margin-top:60px}
+.uc{background:var(--bg2);padding:38px 32px}
+.uc h4{font-size:.92rem;font-weight:600;margin-bottom:10px;color:var(--white)}
+.uc p{font-size:.82rem;color:var(--white3);line-height:1.7}
+
+/* ─── PORTFOLIO ─── */
+.port-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--border2)}
+.port-card{background:var(--bg2);padding:44px 40px;transition:background .2s}
+.port-card:hover{background:var(--bg3)}
+.port-tag{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;display:block}
+.port-card h3{font-size:1.1rem;font-weight:600;color:var(--white);margin-bottom:12px;letter-spacing:-.01em}
+.port-card p{font-size:.85rem;color:var(--white3);line-height:1.7;margin-bottom:20px}
+.port-meta{display:flex;gap:24px;flex-wrap:wrap}
+.port-meta span{font-size:.75rem;color:var(--white4)}
+.port-meta strong{color:var(--white2)}
+
+/* ─── CASE STUDIES ─── */
+.cs-list{display:flex;flex-direction:column;gap:2px;background:var(--border2)}
+.cs-item{background:var(--bg2);padding:48px 44px;display:grid;grid-template-columns:1fr 2fr 1fr;gap:40px;align-items:start;transition:background .2s}
+.cs-item:hover{background:var(--bg3)}
+.cs-cat{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:block}
+.cs-item h3{font-size:1.1rem;font-weight:600;color:var(--white);margin-bottom:10px}
+.cs-item .challenge{font-size:.82rem;color:var(--white3);line-height:1.7}
+.cs-result{background:var(--bg3);border:1px solid var(--border2);border-radius:14px;padding:24px}
+.cs-result h5{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white4);margin-bottom:16px}
+.cs-result ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.cs-result li{font-size:.8rem;color:var(--white2);display:flex;align-items:flex-start;gap:8px}
+.cs-result li::before{content:'→';color:var(--blue);flex-shrink:0;font-size:.75rem}
+.cs-timeline{text-align:right}
+.cs-time-label{font-size:.65rem;color:var(--white4);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:block}
+.cs-time-val{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;font-size:1.6rem;font-weight:700;color:var(--white);letter-spacing:-.03em}
+
+/* ─── ABOUT ─── */
+.about-hero{padding:90px 24px 70px;max-width:860px;margin:0 auto;text-align:center}
+.about-hero h1{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:700;letter-spacing:-.04em;color:var(--white);margin-bottom:22px}
+.about-hero p{font-size:1.1rem;color:var(--white3);line-height:1.75}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border2)}
+.val-card{background:var(--bg2);padding:40px 34px}
+.val-card h4{font-size:1rem;font-weight:600;color:var(--white);margin-bottom:10px}
+.val-card p{font-size:.82rem;color:var(--white3);line-height:1.7}
+.team-strip{background:var(--bg2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);padding:80px 24px}
+.team-inner{max-width:1200px;margin:0 auto}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border2);margin-top:52px}
+.team-card{background:var(--bg3);padding:32px 26px}
+.team-card .t-name{font-size:.92rem;font-weight:600;color:var(--white);margin-bottom:4px}
+.team-card .t-role{font-size:.78rem;color:var(--blue);margin-bottom:10px}
+.team-card .t-bio{font-size:.78rem;color:var(--white4);line-height:1.6}
+.av{width:56px;height:56px;border-radius:50%;background:var(--bg4);margin-bottom:16px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border2);font-size:1.2rem;color:var(--white3)}
+
+/* ─── CONTACT ─── */
+.contact-wrap{max-width:720px;margin:0 auto;padding:80px 24px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.form-group label{font-size:.75rem;font-weight:600;color:var(--white2)}
+.form-group input,.form-group select,.form-group textarea{
+  background:var(--bg2);border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;padding:12px 16px;
+  font-size:.88rem;font-family:inherit;color:var(--white);
+  outline:none;transition:border-color .15s;
+}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--white4)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue)}
+.form-group select option{background:#fff;color:var(--white)}
+.contact-meta{margin-top:60px;padding-top:48px;border-top:1px solid var(--border2);display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.cm-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white4);margin-bottom:8px}
+.cm-val{font-size:.85rem;color:var(--blue);text-decoration:none}
+.cm-val.plain{color:var(--white2)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1000px){
+  .ft-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .srv-grid{grid-template-columns:1fr 1fr}
+  .feat-split{grid-template-columns:1fr}.feat-visual{display:none}
+  .tech-grid{grid-template-columns:1fr 1fr}
+  .ind-grid{grid-template-columns:1fr 1fr}
+  .three-col{grid-template-columns:1fr 1fr}
+  .two-col{grid-template-columns:1fr;gap:48px}
+  .cs-item{grid-template-columns:1fr;gap:20px}
+  .cs-timeline{text-align:left}
+  .team-grid{grid-template-columns:1fr 1fr}
+  .values-grid{grid-template-columns:1fr 1fr}
+  .port-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+@media(max-width:600px){
+  .srv-grid{grid-template-columns:1fr}
+  .tech-grid{grid-template-columns:1fr}
+  .ind-grid{grid-template-columns:1fr 1fr}
+  .three-col{grid-template-columns:1fr}
+  .uc-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .contact-meta{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr}
+  .ft-bottom{flex-direction:column;gap:8px;text-align:center}
+  .values-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+
+/* ─── THEME TOGGLE ─── */
+.theme-toggle{
+  position:fixed;bottom:24px;right:24px;z-index:99999;
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:980px;padding:10px 18px 10px 14px;
+  cursor:pointer;transition:all .2s;user-select:none;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+.theme-toggle:hover{border-color:var(--blue);transform:scale(1.04)}
+.theme-toggle .t-icon{font-size:1rem;line-height:1}
+.theme-toggle .t-label{font-size:.78rem;font-weight:500;color:var(--white3);white-space:nowrap}
+
+/* ─── HAMBURGER MOBILE NAV ─── */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;border:none;background:transparent}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .25s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/* Mobile nav slide-in */
+.mobile-nav{
+  display:none;
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:var(--bg);
+  z-index:9997;
+  overflow-y:auto;
+  padding:0;
+  transform:translateX(100%);
+  transition:transform .38s cubic-bezier(.4,0,.2,1);
+}
+.mobile-nav.open{display:block;transform:translateX(0)}
+/* overlay */
+.mob-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.45);
+  z-index:9996;
+  opacity:0;transition:opacity .3s;
+  backdrop-filter:blur(4px);
+}
+.mob-overlay.open{display:block;opacity:1}
+/* top bar inside mobile nav */
+.mob-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;
+  border-bottom:1px solid var(--border2);
+  position:sticky;top:0;background:var(--bg);z-index:1;
+}
+.mob-logo{font-size:1rem;font-weight:700;color:var(--white);letter-spacing:-.02em}
+.mob-close{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--bg2);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1.1rem;color:var(--white3);
+  transition:all .2s;
+}
+.mob-close:hover{color:var(--white);background:var(--bg3)}
+/* nav list */
+.mob-list{padding:12px 0 100px}
+.mob-nav-item{border-bottom:1px solid var(--border2)}
+.mob-nav-item>span,.mob-nav-item>a{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:1.15rem;font-weight:500;color:var(--white);
+  text-decoration:none;cursor:pointer;
+  padding:18px 24px;
+  transition:color .15s;
+}
+.mob-nav-item>span:hover,.mob-nav-item>a:hover{color:var(--blue)}
+.mob-arrow{color:var(--white4);font-size:.8rem;transition:transform .25s}
+/* accordion sub */
+.mob-sub{
+  max-height:0;overflow:hidden;
+  transition:max-height .35s cubic-bezier(.4,0,.2,1);
+  background:var(--bg2);
+}
+.mob-sub.open{max-height:600px}
+.mob-sub-head{
+  font-size:.6rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--white4);
+  padding:16px 24px 8px;
+}
+.mob-sub-link{
+  display:flex;align-items:center;gap:10px;
+  font-size:.9rem;color:var(--white3);
+  padding:11px 24px;cursor:pointer;text-decoration:none;
+  transition:color .15s,padding-left .15s;
+  border-top:1px solid var(--border2);
+}
+.mob-sub-link:hover{color:var(--blue);padding-left:30px}
+.mob-sub-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);opacity:.6;flex-shrink:0}
+/* staggered animation for links */
+.mob-list .mob-nav-item{
+  opacity:0;transform:translateX(30px);
+  transition:opacity .3s,transform .3s;
+}
+.mobile-nav.open .mob-list .mob-nav-item:nth-child(1){opacity:1;transform:none;transition-delay:.05s}
+.mobile-nav.open .mob-list .mob-nav-item:nth-child(2){opacity:1;transform:none;transition-delay:.1s}
+.mobile-nav.open .mob-list .mob-nav-item:nth-child(3){opacity:1;transform:none;transition-delay:.15s}
+.mobile-nav.open .mob-list .mob-nav-item:nth-child(4){opacity:1;transform:none;transition-delay:.2s}
+.mobile-nav.open .mob-list .mob-nav-item:nth-child(5){opacity:1;transform:none;transition-delay:.25s}
+.mobile-nav.open .mob-list .mob-nav-item:nth-child(6){opacity:1;transform:none;transition-delay:.3s}
+.mobile-nav.open .mob-list .mob-nav-item:nth-child(7){opacity:1;transform:none;transition-delay:.35s}
+/* CTA at bottom */
+.mob-footer{
+  position:fixed;bottom:0;left:0;right:0;
+  padding:16px 24px;
+  background:var(--bg);
+  border-top:1px solid var(--border2);
+  display:flex;gap:10px;
+  z-index:2;
+}
+.mobile-nav.open .mob-footer{display:flex}
+.mob-cta-fill{
+  flex:1;background:var(--blue2);color:#fff;
+  text-align:center;padding:13px;border-radius:980px;
+  font-size:.88rem;font-weight:500;
+  text-decoration:none;cursor:pointer;display:block;
+  transition:background .15s;
+}
+.mob-cta-fill:hover{background:#0077ed}
+.mob-cta-outline{
+  flex:1;background:transparent;
+  border:1px solid var(--border2);
+  color:var(--white);
+  text-align:center;padding:13px;border-radius:980px;
+  font-size:.88rem;font-weight:500;cursor:pointer;
+  display:block;text-decoration:none;
+  transition:border-color .15s;
+}
+.mob-cta-outline:hover{border-color:var(--blue);color:var(--blue)}
+.mob-cta{display:none}
+@media(max-width:860px){
+  .nav-links{display:none!important}
+  .hamburger{display:flex}
+  .nav-right .nav-cta-btn{display:none}
+}
+@media(min-width:861px){
+  .mobile-nav{display:none!important}
+}
+/* Title bar dark stays */
+.mock-bar{padding:12px 16px;background:#1a1a1a;border-bottom:1px solid rgba(0,0,0,0.15);display:flex;align-items:center;gap:6px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <span class="nav-logo" onclick="go('home')" style="font-size:1rem;font-weight:700;letter-spacing:-.02em">NazeForge</span>
+    <div class="nav-links">
+      <div class="nav-item" onmouseenter="openMega('services')" onmouseleave="closeMega()">
+        <span>Services</span>
+      </div>
+      <div class="nav-item" onmouseenter="openMega('industries')" onmouseleave="closeMega()">
+        <span>Industries</span>
+      </div>
+      <div class="nav-item" onmouseenter="closeMega()">
+        <span onclick="go('portfolio')">Portfolio</span>
+      </div>
+      <div class="nav-item" onmouseenter="closeMega()">
+        <span onclick="go('casestudies')">Case Studies</span>
+      </div>
+      <div class="nav-item" onmouseenter="closeMega()">
+        <span onclick="go('about')">About Us</span>
+      </div>
+      <div class="nav-item" onmouseenter="closeMega()">
+        <span onclick="go('contact')">Contact</span>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-right">
+      <span class="nav-icon" title="Search">⌕</span>
+      <a class="nav-cta-btn" onclick="go('contact')">Get a Quote</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Mega: Services -->
+<div class="mega" id="mega-services" onmouseenter="keepMega('services')" onmouseleave="closeMega()">
+  <div class="mega-col">
+    <h5>Core Services</h5>
+    <span onclick="go('ai')">AI Agents &amp; Automation</span>
+    <span class="sub" onclick="go('ai')">Customer support, sales, HR, operations</span>
+    <span onclick="go('custom')" style="margin-top:14px">Custom Software Development</span>
+    <span class="sub" onclick="go('custom')">CRM, ERP, inventory, payroll, hospital</span>
+    <span onclick="go('saas')" style="margin-top:14px">SaaS Development</span>
+    <span class="sub" onclick="go('saas')">Multi-tenant, MVP, white-label platforms</span>
+  </div>
+  <div class="mega-col">
+    <h5>Platforms &amp; Apps</h5>
+    <span onclick="go('portals')">Enterprise Portals</span>
+    <span class="sub" onclick="go('portals')">Client, employee, vendor, partner portals</span>
+    <span onclick="go('mobile')" style="margin-top:14px">Mobile Applications</span>
+    <span class="sub" onclick="go('mobile')">iOS &amp; Android — Flutter, React Native</span>
+    <span onclick="go('api')" style="margin-top:14px">API &amp; Integrations</span>
+    <span class="sub" onclick="go('api')">CRM, ERP, payment gateway, data pipelines</span>
+  </div>
+  <div class="mega-col">
+    <h5>By Solution</h5>
+    <span onclick="go('ai')">AI Customer Support</span>
+    <span onclick="go('ai')">AI Sales Agent</span>
+    <span onclick="go('ai')">AI Voice Agent</span>
+    <span onclick="go('saas')">Marketplace Platform</span>
+    <span onclick="go('saas')">FinTech SaaS</span>
+    <span onclick="go('custom')">Legacy Modernization</span>
+  </div>
+  <div class="mega-col">
+    <h5>Quick Links</h5>
+    <span onclick="go('portfolio')">View Portfolio</span>
+    <span onclick="go('casestudies')">Case Studies</span>
+    <span onclick="go('contact')">Get a Quote</span>
+    <a href="https://calendly.com/workzeesha/30min" target="_blank" style="color:var(--white2);text-decoration:none;cursor:pointer;display:block;font-size:.9rem;font-weight:400;padding:6px 0;transition:color .15s">Schedule a Call</a>
+    <span onclick="go('about')">About NazeForge</span>
+  </div>
+</div>
+
+<!-- Mega: Industries -->
+<div class="mega" id="mega-industries" onmouseenter="keepMega('industries')" onmouseleave="closeMega()">
+  <div class="mega-col">
+    <h5>Healthcare &amp; Life Sciences</h5>
+    <a href="#">Hospital &amp; Clinic Systems</a>
+    <a href="#">Telemedicine Platforms</a>
+    <a href="#">Patient Portals</a>
+    <a href="#">Medical CRM</a>
+  </div>
+  <div class="mega-col">
+    <h5>Finance &amp; Legal</h5>
+    <a href="#">FinTech Platforms</a>
+    <a href="#">Accounting Software</a>
+    <a href="#">Insurance Portals</a>
+    <a href="#">Legal Case Management</a>
+  </div>
+  <div class="mega-col">
+    <h5>Commerce &amp; Logistics</h5>
+    <a href="#">E-commerce Platforms</a>
+    <a href="#">Marketplace Software</a>
+    <a href="#">Fleet &amp; Logistics</a>
+    <a href="#">Warehouse Management</a>
+  </div>
+  <div class="mega-col">
+    <h5>Education &amp; Enterprise</h5>
+    <a href="#">Learning Management</a>
+    <a href="#">School Management</a>
+    <a href="#">HR &amp; Recruitment</a>
+    <a href="#">Manufacturing ERP</a>
+  </div>
+</div>
+
+<!-- ═══════════════ TICKER ═══════════════ -->
+<div class="ticker-wrap" style="display:none" id="ticker-bar">
+  <div class="ticker-track" id="ticker">
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     HOME
+════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">AI · Software · SaaS · Mobile · Portals</div>
+      <h1>Software built for<br><em>how you work.</em></h1>
+      <p class="hero-sub">We design and engineer AI agents, SaaS platforms, and custom business software — for startups and enterprises that need results, not prototypes.</p>
+      <div class="hero-btns">
+        <span class="btn-fill" onclick="go('contact')">Start a Project</span>
+        <span class="btn-outline" onclick="document.getElementById('srv-sec').scrollIntoView({behavior:'smooth'})">Explore Services</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div><div class="stat-n">150+</div><div class="stat-l">Projects delivered</div></div>
+    <div><div class="stat-n">40+</div><div class="stat-l">AI agents deployed</div></div>
+    <div><div class="stat-n">12+</div><div class="stat-l">Industries served</div></div>
+    <div><div class="stat-n">98%</div><div class="stat-l">Client retention</div></div>
+  </div>
+
+  <!-- Services -->
+  <div id="srv-sec">
+    <div class="srv-grid">
+      <div class="srv-tile" onclick="go('ai')">
+        <div class="srv-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="7" width="26" height="26" rx="5" stroke="#2997ff" stroke-width="1.5"/><circle cx="20" cy="20" r="5" fill="rgba(41,151,255,0.15)" stroke="#2997ff" stroke-width="1.5"/><path d="M20 7v6M20 27v6M7 20h6M27 20h6" stroke="#2997ff" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <h3>AI Agents &amp; Automation</h3>
+        <p>Intelligent agents that handle customer support, sales, HR, and operations — trained on your workflows.</p>
+        <div class="lnk">Learn more →</div>
+      </div>
+      <div class="srv-tile" onclick="go('custom')">
+        <div class="srv-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="30" height="20" rx="3" stroke="#2997ff" stroke-width="1.5"/><path d="M13 19l4 4-4 4M21 27h6" stroke="#2997ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Custom Software</h3>
+        <p>CRMs, ERPs, inventory and payroll systems — built around your exact operations, not the other way around.</p>
+        <div class="lnk">Learn more →</div>
+      </div>
+      <div class="srv-tile" onclick="go('saas')">
+        <div class="srv-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 7L35 15.5v9L20 33 5 24.5v-9L20 7z" stroke="#2997ff" stroke-width="1.5"/><path d="M20 7v26M5 15.5l15 9 15-9" stroke="#2997ff" stroke-width="1.5"/></svg></div>
+        <h3>SaaS Development</h3>
+        <p>Multi-tenant SaaS platforms with subscription billing, team management, and cloud-native architecture.</p>
+        <div class="lnk">Learn more →</div>
+      </div>
+      <div class="srv-tile" onclick="go('portals')">
+        <div class="srv-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="7" width="26" height="26" rx="4" stroke="#2997ff" stroke-width="1.5"/><path d="M7 17h26" stroke="#2997ff" stroke-width="1.5"/><rect x="12" y="22" width="8" height="6" rx="1" fill="rgba(41,151,255,0.15)" stroke="#2997ff" stroke-width="1.2"/></svg></div>
+        <h3>Enterprise Portals</h3>
+        <p>Secure client, employee, and vendor portals with role-based access, dashboards, and approval workflows.</p>
+        <div class="lnk">Learn more →</div>
+      </div>
+      <div class="srv-tile" onclick="go('mobile')">
+        <div class="srv-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="13" y="4" width="14" height="32" rx="3" stroke="#2997ff" stroke-width="1.5"/><circle cx="20" cy="32" r="1.5" fill="#2997ff"/><path d="M17 9h6" stroke="#2997ff" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <h3>Mobile Applications</h3>
+        <p>Cross-platform iOS and Android apps with Flutter and React Native — built for performance and retention.</p>
+        <div class="lnk">Learn more →</div>
+      </div>
+      <div class="srv-tile" onclick="go('api')">
+        <div class="srv-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="20" r="4" stroke="#2997ff" stroke-width="1.5"/><circle cx="29" cy="11" r="4" stroke="#2997ff" stroke-width="1.5"/><circle cx="29" cy="29" r="4" stroke="#2997ff" stroke-width="1.5"/><path d="M15 20h8M25 13l-9 6M25 27l-9-6" stroke="#2997ff" stroke-width="1.2"/></svg></div>
+        <h3>API &amp; Integrations</h3>
+        <p>Connect your tools — CRM, ERP, payment gateways, and third-party APIs — into one unified ecosystem.</p>
+        <div class="lnk">Learn more →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why us -->
+  <div class="sec">
+    <div class="feat-split">
+      <div>
+        <span class="s-label">Why NazeForge</span>
+        <h2 class="s-title">Engineered for growth, not just delivery.</h2>
+        <p class="s-body">We build systems that scale with your business — not software you outgrow in six months.</p>
+        <ul class="feat-list" style="margin-top:40px">
+          <li class="feat-item"><span class="feat-n">01</span><div><h4>End-to-end ownership</h4><p>From strategy to deployment and ongoing support — one team, zero handoff confusion.</p></div></li>
+          <li class="feat-item"><span class="feat-n">02</span><div><h4>Scalable architecture</h4><p>Every system is built to handle growth — whether that's 100 or 100,000 users.</p></div></li>
+          <li class="feat-item"><span class="feat-n">03</span><div><h4>Transparent process</h4><p>Weekly updates, dedicated project manager, and clear milestones at every stage.</p></div></li>
+          <li class="feat-item"><span class="feat-n">04</span><div><h4>AI-first thinking</h4><p>We consider automation and intelligence at the architecture level — not as an afterthought.</p></div></li>
+        </ul>
+      </div>
+      <div class="feat-visual">
+        <div class="mock-win">
+          <div class="mock-bar"><div class="m-dot" style="background:#ff5f57"></div><div class="m-dot" style="background:#ffbd2e"></div><div class="m-dot" style="background:#28c840"></div></div>
+          <div class="mock-rows">
+            <div class="m-row w100"></div><div class="m-row w80"></div><div class="m-row blue"></div>
+            <div class="m-row w100" style="margin-top:8px"></div><div class="m-row w60"></div><div class="m-row blue" style="width:65%"></div>
+            <div class="m-row w100" style="margin-top:8px"></div><div class="m-row w40"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Process -->
+  <div style="background:var(--bg2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)">
+    <div class="sec">
+      <div class="s-head tc"><span class="s-label">How we work</span><h2 class="s-title">From concept to deployed product.</h2></div>
+      <div class="proc-list">
+        <div class="proc-item"><span class="proc-tag">Discovery</span><div class="proc-content"><h3>We understand your business before writing a line of code</h3><p>Deep discovery covering your goals, existing workflows, technical constraints, and success metrics.</p></div></div>
+        <div class="proc-item"><span class="proc-tag">Planning</span><div class="proc-content"><h3>Architecture, roadmap, and timeline — agreed upfront</h3><p>We define the technical architecture, milestones, and delivery timeline before development begins.</p></div></div>
+        <div class="proc-item"><span class="proc-tag">Design</span><div class="proc-content"><h3>Interfaces built for usability, not just appearance</h3><p>Clean, modern UI/UX focused on how real users will interact with the product day-to-day.</p></div></div>
+        <div class="proc-item"><span class="proc-tag">Build</span><div class="proc-content"><h3>Agile sprints with weekly demos and clear communication</h3><p>Production-grade code with comprehensive testing, security reviews, and performance benchmarking.</p></div></div>
+        <div class="proc-item"><span class="proc-tag">Launch</span><div class="proc-content"><h3>Deployment, monitoring, and long-term support</h3><p>We handle infrastructure setup, go-live support, and continue improving the system after launch.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech -->
+  <div class="tech-wrap">
+    <div class="tech-inner">
+      <div class="s-head tc"><span class="s-label">Technology</span><h2 class="s-title">The right tool for every project.</h2><p class="s-body">We choose technology based on what your project actually needs — not what's trending.</p></div>
+      <div class="tech-grid">
+        <div class="tech-card"><span class="tech-cat-lbl">Frontend</span><div class="pills"><span class="pill">React</span><span class="pill">Next.js</span><span class="pill">Vue.js</span><span class="pill">TypeScript</span><span class="pill">Tailwind CSS</span></div></div>
+        <div class="tech-card"><span class="tech-cat-lbl">Backend</span><div class="pills"><span class="pill">Node.js</span><span class="pill">NestJS</span><span class="pill">Python</span><span class="pill">FastAPI</span><span class="pill">Laravel</span></div></div>
+        <div class="tech-card"><span class="tech-cat-lbl">Mobile</span><div class="pills"><span class="pill">Flutter</span><span class="pill">React Native</span><span class="pill">Swift</span><span class="pill">Kotlin</span></div></div>
+        <div class="tech-card"><span class="tech-cat-lbl">Database</span><div class="pills"><span class="pill">PostgreSQL</span><span class="pill">MongoDB</span><span class="pill">Supabase</span><span class="pill">Firebase</span><span class="pill">Redis</span></div></div>
+        <div class="tech-card"><span class="tech-cat-lbl">Cloud &amp; DevOps</span><div class="pills"><span class="pill">AWS</span><span class="pill">Google Cloud</span><span class="pill">Azure</span><span class="pill">Docker</span><span class="pill">Kubernetes</span><span class="pill">Vercel</span></div></div>
+        <div class="tech-card"><span class="tech-cat-lbl">AI &amp; Automation</span><div class="pills"><span class="pill">OpenAI</span><span class="pill">Anthropic</span><span class="pill">Gemini</span><span class="pill">LangChain</span><span class="pill">CrewAI</span><span class="pill">n8n</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industries -->
+  <div class="sec">
+    <div class="s-head tc"><span class="s-label">Industries</span><h2 class="s-title">Domain expertise across sectors.</h2><p class="s-body">We've shipped products across 12+ industries — so we understand your world before we start.</p></div>
+    <div class="ind-grid">
+      <div class="ind-tile"><div class="ind-name">Healthcare</div><div class="ind-desc">Hospital systems, telemedicine, patient portals, medical CRM</div></div>
+      <div class="ind-tile"><div class="ind-name">Finance &amp; FinTech</div><div class="ind-desc">Payment systems, accounting software, lending platforms</div></div>
+      <div class="ind-tile"><div class="ind-name">Real Estate</div><div class="ind-desc">Property management, CRMs, listing portals, lead tools</div></div>
+      <div class="ind-tile"><div class="ind-name">E-commerce</div><div class="ind-desc">Online stores, marketplaces, inventory, order management</div></div>
+      <div class="ind-tile"><div class="ind-name">Education</div><div class="ind-desc">LMS, student portals, school management, e-learning</div></div>
+      <div class="ind-tile"><div class="ind-name">Logistics</div><div class="ind-desc">Fleet management, shipment tracking, warehouse systems</div></div>
+      <div class="ind-tile"><div class="ind-name">Legal</div><div class="ind-desc">Case management, document automation, client portals</div></div>
+      <div class="ind-tile"><div class="ind-name">Manufacturing</div><div class="ind-desc">Production management, ERP, inventory, quality control</div></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <h2>Ready to build something that lasts?</h2>
+    <p>Tell us your idea. We'll map out the approach, timeline, and cost — no commitment needed.</p>
+    <div class="cta-btns"><a class="btn-fill" href="https://calendly.com/workzeesha/30min" target="_blank">Schedule a Free Call</a><span class="btn-outline" onclick="go('portfolio')">View Portfolio</span></div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="ft-grid">
+      <div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>AI-powered software that helps businesses automate, scale, and compete — from first commit to long-term support.</p></div>
+      <div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS Development</span></li><li><span onclick="go('portals')">Enterprise Portals</span></li><li><span onclick="go('mobile')">Mobile Apps</span></li><li><span onclick="go('api')">API &amp; Integrations</span></li></ul></div>
+      <div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About Us</span></li><li><span onclick="go('portfolio')">Portfolio</span></li><li><span onclick="go('casestudies')">Case Studies</span></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li></ul></div>
+      <div class="ft-col"><h5>Industries</h5><ul><li><a href="#">Healthcare</a></li><li><a href="#">Finance</a></li><li><a href="#">E-commerce</a></li><li><a href="#">Education</a></li><li><a href="#">Logistics</a></li></ul></div>
+      <div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><a href="#">LinkedIn</a></li><li><a href="#">WhatsApp</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div>
+    </div>
+    <div class="ft-bottom"><span>© 2025 NazeForge. All rights reserved.</span><span>Privacy Policy · Terms of Service</span></div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════ AI AGENTS ═══════════════ -->
+<div class="page" id="page-ai">
+  <div class="sp-hero">
+    <span class="s-label">AI Agents &amp; Automation</span>
+    <h1>Intelligent agents that work while you sleep.</h1>
+    <p>We build AI systems that handle customer support, sales, HR, and operations — trained on your data, integrated into your workflows.</p>
+    <div class="hero-btns" style="justify-content:center"><span class="btn-fill" onclick="go('contact')">Build Your AI Agent</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-body">
+    <div class="two-col" style="margin-bottom:80px">
+      <div>
+        <span class="s-label">What we build</span>
+        <h2 class="s-title">AI for every business function.</h2>
+        <p class="s-body">From a simple chatbot to a complex multi-agent workflow — designed and deployed for real-world use.</p>
+        <ul class="feat-list" style="margin-top:36px">
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>AI Customer Support Agent</h4><p>24/7 support in 50+ languages, integrated with your helpdesk and knowledge base.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>AI Sales &amp; Lead Qualification</h4><p>Qualifies inbound leads, books meetings, and hands off when the time is right.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>AI Voice Agent</h4><p>Real-time phone conversations — appointment booking, FAQ handling, call routing.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>AI WhatsApp &amp; Email Agent</h4><p>Respond, follow up, and escalate — automatically, across messaging channels.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>AI HR &amp; Recruitment Assistant</h4><p>Screen candidates, answer HR queries, and automate onboarding workflows.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>AI Document Analysis</h4><p>Extract, classify, and process data from invoices, contracts, and reports at scale.</p></div></li>
+        </ul>
+      </div>
+      <div class="feat-visual" style="aspect-ratio:auto;min-height:400px">
+        <div class="mock-win" style="inset:28px">
+          <div class="mock-bar"><div class="m-dot" style="background:#ff5f57"></div><div class="m-dot" style="background:#ffbd2e"></div><div class="m-dot" style="background:#28c840"></div></div>
+          <div class="mock-rows">
+            <div class="m-row blue"></div><div class="m-row w80"></div><div class="m-row w60"></div>
+            <div style="display:flex;gap:10px;margin-top:12px">
+              <div style="flex:1;background:var(--bg4);border-radius:8px;padding:12px"><div class="m-row w100" style="margin-bottom:6px"></div><div class="m-row blue" style="width:40%"></div></div>
+              <div style="flex:1;background:var(--bg4);border-radius:8px;padding:12px"><div class="m-row w100" style="margin-bottom:6px"></div><div class="m-row blue" style="width:60%"></div></div>
+            </div>
+            <div class="m-row w100" style="margin-top:12px"></div><div class="m-row w60"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="s-head tc"><span class="s-label">Capabilities</span><h2 class="s-title">Built for real-world deployment.</h2></div>
+    <div class="uc-grid">
+      <div class="uc"><h4>Natural language conversations</h4><p>Understands intent, context, and nuance — not just keywords.</p></div>
+      <div class="uc"><h4>Multi-language support</h4><p>Handles 50+ languages with native-quality responses.</p></div>
+      <div class="uc"><h4>CRM &amp; tool integrations</h4><p>Connects to Salesforce, HubSpot, Zoho, and custom systems.</p></div>
+      <div class="uc"><h4>Voice capabilities</h4><p>Real-time phone and web voice agent with human-like quality.</p></div>
+      <div class="uc"><h4>Analytics dashboard</h4><p>Track conversations, conversion rates, escalations, and CSAT.</p></div>
+      <div class="uc"><h4>Secure cloud deployment</h4><p>Enterprise-grade security, data isolation, compliance-ready.</p></div>
+    </div>
+  </div>
+  <div class="cta-band"><h2>Ready to automate?</h2><p>Let's build an AI agent tailored to your workflows — deployed within weeks.</p><div class="cta-btns"><span class="btn-fill" onclick="go('contact')">Get Started</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div></div>
+  <footer><div class="ft-grid"><div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>AI-powered software for modern businesses.</p></div><div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS</span></li><li><span onclick="go('portals')">Portals</span></li><li><span onclick="go('mobile')">Mobile</span></li></ul></div><div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About</span></li><li><span onclick="go('portfolio')">Portfolio</span></li><li><span onclick="go('casestudies')">Case Studies</span></li></ul></div><div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div></div><div class="ft-bottom"><span>© 2025 NazeForge</span><span>Privacy · Terms</span></div></footer>
+</div>
+
+
+<!-- ═══════════════ CUSTOM SOFTWARE ═══════════════ -->
+<div class="page" id="page-custom">
+  <div class="sp-hero">
+    <span class="s-label">Custom Software Development</span>
+    <h1>Software shaped around your operations.</h1>
+    <p>Off-the-shelf tools create workarounds. We build systems designed specifically for how your business works.</p>
+    <div class="hero-btns" style="justify-content:center"><span class="btn-fill" onclick="go('contact')">Start Your Project</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-body">
+    <div class="s-head tc"><span class="s-label">Solutions</span><h2 class="s-title">What we build for you.</h2></div>
+    <div class="three-col" style="margin-bottom:80px">
+      <div class="feat-card"><h4>CRM Systems</h4><p>Custom customer relationship management built for your sales process, pipeline, and reporting needs.</p></div>
+      <div class="feat-card"><h4>ERP Solutions</h4><p>Unified enterprise resource planning — finance, HR, inventory, and operations in one system.</p></div>
+      <div class="feat-card"><h4>Inventory Management</h4><p>Real-time stock tracking, automated reordering, and warehouse management across locations.</p></div>
+      <div class="feat-card"><h4>HR &amp; Payroll Systems</h4><p>Employee management, leave tracking, payroll processing, and compliance reporting.</p></div>
+      <div class="feat-card"><h4>Hospital &amp; Clinic Systems</h4><p>Patient records, appointment scheduling, billing, and telemedicine — fully compliant.</p></div>
+      <div class="feat-card"><h4>POS &amp; Retail Software</h4><p>Point-of-sale systems, inventory sync, loyalty programs, and sales analytics.</p></div>
+      <div class="feat-card"><h4>Logistics &amp; Fleet Software</h4><p>Route optimization, shipment tracking, driver management, and delivery workflows.</p></div>
+      <div class="feat-card"><h4>Project Management Tools</h4><p>Custom task management, resource planning, and team collaboration platforms.</p></div>
+      <div class="feat-card"><h4>Legacy Modernization</h4><p>Migrate and rebuild outdated systems into modern, scalable, cloud-based applications.</p></div>
+    </div>
+  </div>
+  <div class="cta-band"><h2>Let's build your custom system.</h2><p>Tell us what you need. We'll scope it, price it, and build it — on time.</p><div class="cta-btns"><span class="btn-fill" onclick="go('contact')">Get a Quote</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div></div>
+  <footer><div class="ft-grid"><div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>Custom software that fits your business.</p></div><div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS</span></li><li><span onclick="go('portals')">Portals</span></li><li><span onclick="go('mobile')">Mobile</span></li></ul></div><div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About</span></li><li><span onclick="go('portfolio')">Portfolio</span></li></ul></div><div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div></div><div class="ft-bottom"><span>© 2025 NazeForge</span><span>Privacy · Terms</span></div></footer>
+</div>
+
+
+<!-- ═══════════════ SAAS ═══════════════ -->
+<div class="page" id="page-saas">
+  <div class="sp-hero">
+    <span class="s-label">SaaS Development</span>
+    <h1>Launch your SaaS faster than you think.</h1>
+    <p>We build multi-tenant SaaS platforms from concept to launch — whether you're validating an MVP or scaling to thousands of users.</p>
+    <div class="hero-btns" style="justify-content:center"><span class="btn-fill" onclick="go('contact')">Start Your SaaS</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-body">
+    <div class="s-head tc"><span class="s-label">What's included</span><h2 class="s-title">Everything a SaaS product needs.</h2></div>
+    <div class="three-col">
+      <div class="feat-card"><h4>Multi-Tenant Architecture</h4><p>Isolated data per customer, shared infrastructure — security and cost efficiency balanced.</p></div>
+      <div class="feat-card"><h4>Subscription Billing</h4><p>Stripe integration with plans, trials, upgrades, invoices, and usage-based billing.</p></div>
+      <div class="feat-card"><h4>User Authentication</h4><p>Sign up, login, SSO, 2FA, and team invitations — built with Clerk, Auth0, or custom.</p></div>
+      <div class="feat-card"><h4>Admin Dashboard</h4><p>Full control panel for managing users, subscriptions, analytics, and system health.</p></div>
+      <div class="feat-card"><h4>Role-Based Permissions</h4><p>Granular access control for every feature, resource, and data type.</p></div>
+      <div class="feat-card"><h4>Analytics &amp; Reporting</h4><p>In-app analytics for customers plus internal metrics for your team.</p></div>
+      <div class="feat-card"><h4>API Access</h4><p>REST or GraphQL APIs with authentication, rate limiting, and full documentation.</p></div>
+      <div class="feat-card"><h4>White Label Option</h4><p>Custom branding, domain, and UI per customer — for agencies and resellers.</p></div>
+      <div class="feat-card"><h4>Scalable Infrastructure</h4><p>Auto-scaling, zero-downtime deployments, and traffic spike handling built in.</p></div>
+    </div>
+  </div>
+  <div class="cta-band"><h2>Have a SaaS idea? Let's build it.</h2><p>From napkin sketch to live product — we've done it before and we'll do it for you.</p><div class="cta-btns"><span class="btn-fill" onclick="go('contact')">Discuss Your Idea</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div></div>
+  <footer><div class="ft-grid"><div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>SaaS products built for growth.</p></div><div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS</span></li><li><span onclick="go('portals')">Portals</span></li><li><span onclick="go('mobile')">Mobile</span></li></ul></div><div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About</span></li><li><span onclick="go('portfolio')">Portfolio</span></li></ul></div><div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div></div><div class="ft-bottom"><span>© 2025 NazeForge</span><span>Privacy · Terms</span></div></footer>
+</div>
+
+
+<!-- ═══════════════ PORTALS ═══════════════ -->
+<div class="page" id="page-portals">
+  <div class="sp-hero">
+    <span class="s-label">Enterprise Portals</span>
+    <h1>Secure portals for every stakeholder.</h1>
+    <p>Custom web portals that bring your clients, employees, vendors, and partners onto one secure, branded platform.</p>
+    <div class="hero-btns" style="justify-content:center"><span class="btn-fill" onclick="go('contact')">Build Your Portal</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-body">
+    <div class="s-head tc"><span class="s-label">Portal types</span><h2 class="s-title">A portal for every relationship.</h2></div>
+    <div class="three-col" style="margin-bottom:60px">
+      <div class="feat-card"><h4>Client Portal</h4><p>Track projects, view invoices, share documents, and message your team — all branded.</p></div>
+      <div class="feat-card"><h4>Employee Portal</h4><p>HR self-service — leave requests, payslips, documents, announcements, and onboarding.</p></div>
+      <div class="feat-card"><h4>Vendor Portal</h4><p>Supplier onboarding, PO management, invoice submission, and payment status tracking.</p></div>
+      <div class="feat-card"><h4>Healthcare Portal</h4><p>Patient records, appointment booking, prescriptions, and secure doctor-patient messaging.</p></div>
+      <div class="feat-card"><h4>Education Portal</h4><p>Student and parent access to grades, attendance, assignments, and fee management.</p></div>
+      <div class="feat-card"><h4>Membership Portal</h4><p>Member directory, gated content, event registration, and subscription management.</p></div>
+    </div>
+  </div>
+  <div class="cta-band"><h2>Ready to centralize your operations?</h2><p>A custom portal replaces scattered emails and spreadsheets with one secure platform.</p><div class="cta-btns"><span class="btn-fill" onclick="go('contact')">Get a Quote</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div></div>
+  <footer><div class="ft-grid"><div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>Secure portals for businesses and enterprises.</p></div><div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS</span></li><li><span onclick="go('portals')">Portals</span></li><li><span onclick="go('mobile')">Mobile</span></li></ul></div><div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About</span></li><li><span onclick="go('portfolio')">Portfolio</span></li></ul></div><div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div></div><div class="ft-bottom"><span>© 2025 NazeForge</span><span>Privacy · Terms</span></div></footer>
+</div>
+
+
+<!-- ═══════════════ MOBILE ═══════════════ -->
+<div class="page" id="page-mobile">
+  <div class="sp-hero">
+    <span class="s-label">Mobile Applications</span>
+    <h1>Apps your users will actually come back to.</h1>
+    <p>Cross-platform iOS and Android applications built with Flutter and React Native — native performance, shipped faster.</p>
+    <div class="hero-btns" style="justify-content:center"><span class="btn-fill" onclick="go('contact')">Build Your App</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-body">
+    <div class="two-col">
+      <div>
+        <span class="s-label">What we build</span>
+        <h2 class="s-title">Every type of mobile application.</h2>
+        <ul class="feat-list" style="margin-top:36px">
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>Consumer Apps</h4><p>E-commerce, social, lifestyle, and marketplace apps built for engagement and retention.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>Enterprise Mobile Apps</h4><p>Field service, sales tools, and internal apps that replace paper and email.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>On-Demand Apps</h4><p>Delivery, booking, ride-sharing, and service marketplace applications.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>HealthTech Apps</h4><p>Patient-facing apps with appointment booking, health tracking, and telemedicine.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>FinTech Apps</h4><p>Wallets, payment apps, investment tracking, and lending platforms.</p></div></li>
+          <li class="feat-item"><span class="feat-n">—</span><div><h4>EdTech Apps</h4><p>Learning apps with video, quizzes, progress tracking, and gamification.</p></div></li>
+        </ul>
+      </div>
+      <div>
+        <span class="s-label">Our process</span>
+        <h2 class="s-title" style="margin-bottom:36px">From wireframe to App Store.</h2>
+        <div class="proc-list">
+          <div class="proc-item" style="grid-template-columns:80px 1fr"><span class="proc-tag">Strategy</span><div class="proc-content"><h3>Define the core user journey</h3><p>We map critical flows before any screen gets designed.</p></div></div>
+          <div class="proc-item" style="grid-template-columns:80px 1fr"><span class="proc-tag">Design</span><div class="proc-content"><h3>Platform-native UI with your branding</h3><p>iOS and Android guidelines respected, brand applied on top.</p></div></div>
+          <div class="proc-item" style="grid-template-columns:80px 1fr"><span class="proc-tag">Build</span><div class="proc-content"><h3>Flutter or React Native — whichever fits</h3><p>Cross-platform with native modules where performance demands it.</p></div></div>
+          <div class="proc-item" style="grid-template-columns:80px 1fr"><span class="proc-tag">Submit</span><div class="proc-content"><h3>App Store and Play Store submission handled</h3><p>We manage the review process, metadata, and launch strategy.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cta-band"><h2>Ready to ship your app?</h2><p>Tell us what you're building. We'll tell you the fastest way to get it in your users' hands.</p><div class="cta-btns"><span class="btn-fill" onclick="go('contact')">Get Started</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div></div>
+  <footer><div class="ft-grid"><div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>Mobile apps built for performance and growth.</p></div><div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS</span></li><li><span onclick="go('portals')">Portals</span></li><li><span onclick="go('mobile')">Mobile</span></li></ul></div><div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About</span></li><li><span onclick="go('portfolio')">Portfolio</span></li></ul></div><div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div></div><div class="ft-bottom"><span>© 2025 NazeForge</span><span>Privacy · Terms</span></div></footer>
+</div>
+
+
+<!-- ═══════════════ API ═══════════════ -->
+<div class="page" id="page-api">
+  <div class="sp-hero">
+    <span class="s-label">API &amp; Integrations</span>
+    <h1>Connect everything. Break nothing.</h1>
+    <p>We design and build APIs and integrations that tie your tools together into one seamless system — so data flows where it needs to, automatically.</p>
+    <div class="hero-btns" style="justify-content:center"><span class="btn-fill" onclick="go('contact')">Discuss Your Integration</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div>
+  </div>
+  <div class="sp-divider"></div>
+  <div class="sp-body">
+    <div class="s-head tc"><span class="s-label">What we build</span><h2 class="s-title">APIs and integrations for any system.</h2></div>
+    <div class="three-col">
+      <div class="feat-card"><h4>REST &amp; GraphQL APIs</h4><p>Clean, versioned, documented APIs with authentication, rate limiting, and error handling.</p></div>
+      <div class="feat-card"><h4>CRM Integrations</h4><p>Salesforce, HubSpot, Zoho, Pipedrive — bidirectional sync with your existing workflows.</p></div>
+      <div class="feat-card"><h4>Payment Gateway Integration</h4><p>Stripe, PayPal, Razorpay, Square — subscription billing, one-time payments, refunds.</p></div>
+      <div class="feat-card"><h4>ERP Integrations</h4><p>Connect SAP, Oracle, or your custom ERP to frontend apps, portals, and dashboards.</p></div>
+      <div class="feat-card"><h4>Communication APIs</h4><p>Twilio, SendGrid, WhatsApp Business API — SMS, email, and messaging automation.</p></div>
+      <div class="feat-card"><h4>Data Pipeline &amp; ETL</h4><p>Move and transform data between systems, databases, and warehouses reliably.</p></div>
+    </div>
+  </div>
+  <div class="cta-band"><h2>Time to connect your tools?</h2><p>Stop copying data between systems. We'll build the integration once and it'll run forever.</p><div class="cta-btns"><span class="btn-fill" onclick="go('contact')">Get Started</span><span class="btn-outline" onclick="go('home')">Back to Home</span></div></div>
+  <footer><div class="ft-grid"><div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>APIs and integrations that make your stack work as one.</p></div><div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS</span></li></ul></div><div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About</span></li><li><span onclick="go('portfolio')">Portfolio</span></li></ul></div><div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div></div><div class="ft-bottom"><span>© 2025 NazeForge</span><span>Privacy · Terms</span></div></footer>
+</div>
+
+
+<!-- ═══════════════ PORTFOLIO ═══════════════ -->
+<div class="page" id="page-portfolio">
+  <!-- ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+    </div>
+  </div>
+  <div class="sp-hero">
+    <span class="s-label">Portfolio</span>
+    <h1>Work that speaks for itself.</h1>
+    <p>A selection of projects we've designed, engineered, and shipped — across industries, platforms, and problem types.</p>
+  </div>
+  <div class="sp-divider"></div>
+  <div style="max-width:1200px;margin:0 auto;padding:80px 24px">
+    <div class="port-grid">
+      <div class="port-card">
+        <span class="port-tag">Healthcare · SaaS</span>
+        <h3>Patient Management &amp; Telemedicine Platform</h3>
+        <p>A multi-clinic SaaS platform handling appointments, EHR records, video consultations, and billing. Served 8 clinics at launch with role-based access for doctors, nurses, and admins.</p>
+        <div class="port-meta"><span>Stack: <strong>Next.js, Node.js, PostgreSQL, AWS</strong></span><span>Delivered: <strong>11 weeks</strong></span></div>
+      </div>
+      <div class="port-card">
+        <span class="port-tag">E-commerce · Custom Software</span>
+        <h3>Multi-Vendor Marketplace &amp; Inventory System</h3>
+        <p>Built a B2B wholesale marketplace with vendor onboarding, automated inventory sync, order management, and custom pricing tiers per buyer segment.</p>
+        <div class="port-meta"><span>Stack: <strong>React, Laravel, MySQL, Stripe</strong></span><span>Delivered: <strong>9 weeks</strong></span></div>
+      </div>
+            <div class="port-card">
+        <span class="port-tag">Finance · AI Automation</span>
+        <h3>AI Invoice Processing &amp; Accounts Payable Automation</h3>
+        <p>Deployed an AI agent that extracts data from supplier invoices, matches against POs, flags discrepancies, and routes for approval — cutting manual processing time by 80%.</p>
+        <div class="port-meta"><span>Stack: <strong>Python, OpenAI, FastAPI, React</strong></span><span>Delivered: <strong>6 weeks</strong></span></div>
+      </div>
+      <div class="port-card">
+        <span class="port-tag">Real Estate · Portal</span>
+        <h3>Broker &amp; Client Management Portal</h3>
+        <p>A portal connecting real estate brokers, buyers, and sellers — with property listings, document signing, commission tracking, and a built-in CRM.</p>
+        <div class="port-meta"><span>Stack: <strong>Vue.js, NestJS, MongoDB</strong></span><span>Delivered: <strong>8 weeks</strong></span></div>
+      </div>
+      <div class="port-card">
+        <span class="port-tag">Logistics · Mobile</span>
+        <h3>Driver &amp; Fleet Tracking Mobile App</h3>
+        <p>iOS and Android app for real-time driver tracking, route optimization, delivery confirmation, and customer notifications — integrated with a web dispatch dashboard.</p>
+        <div class="port-meta"><span>Stack: <strong>Flutter, Node.js, Google Maps API</strong></span><span>Delivered: <strong>10 weeks</strong></span></div>
+      </div>
+      <div class="port-card">
+        <span class="port-tag">Education · SaaS</span>
+        <h3>Learning Management System for Training Companies</h3>
+        <p>A white-label LMS with course authoring, video hosting, student progress tracking, certificates, and multi-tenant branding for training organizations.</p>
+        <div class="port-meta"><span>Stack: <strong>Next.js, Python, PostgreSQL, AWS S3</strong></span><span>Delivered: <strong>14 weeks</strong></span></div>
+      </div>
+      <div class="port-card">
+        <span class="port-tag">HR Tech · AI</span>
+        <h3>AI Recruitment &amp; Candidate Screening Platform</h3>
+        <p>An AI-powered recruitment tool that screens CVs, scores candidates, generates interview summaries, and integrates with existing ATS workflows.</p>
+        <div class="port-meta"><span>Stack: <strong>React, FastAPI, Anthropic Claude, PostgreSQL</strong></span><span>Delivered: <strong>7 weeks</strong></span></div>
+      </div>
+      <div class="port-card">
+        <span class="port-tag">Manufacturing · ERP</span>
+        <h3>Production Planning &amp; Quality Control ERP</h3>
+        <p>Custom ERP for a mid-size manufacturer covering production scheduling, raw material tracking, quality inspections, and supplier management — replacing four disconnected tools.</p>
+        <div class="port-meta"><span>Stack: <strong>React, Django, PostgreSQL, Docker</strong></span><span>Delivered: <strong>16 weeks</strong></span></div>
+      </div>
+      <div class="port-card">
+        <span class="port-tag">Retail · AI Automation</span>
+        <h3>AI Customer Support Agent for Retail Chain</h3>
+        <p>Deployed a WhatsApp and web chat AI agent handling order status, returns, and FAQs — resolving 73% of queries without human escalation.</p>
+        <div class="port-meta"><span>Stack: <strong>Python, LangChain, WhatsApp API, React</strong></span><span>Delivered: <strong>4 weeks</strong></span></div>
+      </div>
+      <div class="port-card">
+        <span class="port-tag">Legal Tech · Custom Software</span>
+        <h3>Case Management &amp; Client Portal for Law Firm</h3>
+        <p>A secure platform managing case files, deadlines, client communications, document signing, and billing — with strict role-based access and full audit logging.</p>
+        <div class="port-meta"><span>Stack: <strong>Next.js, Node.js, PostgreSQL, AWS</strong></span><span>Delivered: <strong>12 weeks</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h2>Want to see what we can build for you?</h2>
+    <p>Every project starts with a conversation. Let's have one.</p>
+    <div class="cta-btns">
+      <span class="btn-fill" onclick="go('contact')">Start a Project</span>
+      <span class="btn-outline" onclick="go('casestudies')">Read Case Studies</span>
+    </div>
+  </div>
+  <footer>
+    <div class="ft-grid">
+      <div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>AI-powered software for modern businesses.</p></div>
+      <div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS</span></li><li><span onclick="go('portals')">Portals</span></li><li><span onclick="go('mobile')">Mobile</span></li></ul></div>
+      <div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About</span></li><li><span onclick="go('casestudies')">Case Studies</span></li></ul></div>
+      <div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div>
+    </div>
+    <div class="ft-bottom"><span>© 2025 NazeForge</span><span>Privacy · Terms</span></div>
+  </footer>
+</div>
+
+
+<!-- CASE STUDIES -->
+<div class="page" id="page-casestudies">
+  <!-- ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+    </div>
+  </div>
+  <div class="sp-hero">
+    <span class="s-label">Case Studies</span>
+    <h1>Real problems. Real outcomes.</h1>
+    <p>A deeper look at how we've helped businesses solve complex challenges through software and AI.</p>
+  </div>
+  <div class="sp-divider"></div>
+  <div style="max-width:1200px;margin:0 auto;padding:80px 24px">
+    <div class="cs-list">
+      <div class="cs-item">
+        <div>
+          <span class="cs-cat">Healthcare · SaaS</span>
+          <h3>Replacing paper-based clinic operations with a fully digital patient management system</h3>
+          <p class="challenge">A network of 8 outpatient clinics was managing appointments, records, and billing across WhatsApp, Excel, and paper. Errors were frequent and patient experience was suffering.</p>
+        </div>
+        <div>
+          <p style="font-size:.85rem;color:var(--white3);line-height:1.75"><strong style="color:var(--white2);display:block;margin-bottom:12px">What we built</strong>A multi-tenant SaaS platform with clinic dashboards, EHR records, appointment booking with reminders, teleconsultation, billing, and a patient mobile app.</p>
+        </div>
+        <div>
+          <div class="cs-timeline"><span class="cs-time-label">Delivered in</span><span class="cs-time-val">11 wks</span></div>
+          <div class="cs-result" style="margin-top:20px"><h5>Outcomes</h5><ul><li>62% reduction in appointment no-shows</li><li>All 8 clinics onboarded at launch</li><li>Billing errors eliminated</li><li>Patient satisfaction improved significantly</li></ul></div>
+        </div>
+      </div>
+      <div class="cs-item">
+        <div>
+          <span class="cs-cat">Finance · AI Automation</span>
+          <h3>Automating accounts payable — from 4 days of manual work to 4 hours</h3>
+          <p class="challenge">A mid-size distributor was processing 400+ supplier invoices per month manually — data entry, PO matching, and approval routing. The team spent 3–4 days each month on this alone.</p>
+        </div>
+        <div>
+          <p style="font-size:.85rem;color:var(--white3);line-height:1.75"><strong style="color:var(--white2);display:block;margin-bottom:12px">What we built</strong>An AI agent that ingests invoices from email, extracts line items using OCR and LLM parsing, matches against POs, flags exceptions, and routes approvals via a web dashboard.</p>
+        </div>
+        <div>
+          <div class="cs-timeline"><span class="cs-time-label">Delivered in</span><span class="cs-time-val">6 wks</span></div>
+          <div class="cs-result" style="margin-top:20px"><h5>Outcomes</h5><ul><li>80% reduction in processing time</li><li>400+ invoices handled monthly</li><li>Exception tracking improved over time</li><li>ROI achieved within first quarter</li></ul></div>
+        </div>
+      </div>
+      <div class="cs-item">
+        <div>
+          <span class="cs-cat">Retail · AI Agent</span>
+          <h3>A WhatsApp AI agent handling 73% of customer queries without any human involvement</h3>
+          <p class="challenge">A retail chain with 12 branches received 800+ WhatsApp messages daily. Their team of 6 support agents was overwhelmed and response times had reached 4+ hours.</p>
+        </div>
+        <div>
+          <p style="font-size:.85rem;color:var(--white3);line-height:1.75"><strong style="color:var(--white2);display:block;margin-bottom:12px">What we built</strong>A WhatsApp Business AI agent trained on their catalog, return policy, and order system — handling FAQs, order lookups, and returns automatically, with intelligent human escalation.</p>
+        </div>
+        <div>
+          <div class="cs-timeline"><span class="cs-time-label">Delivered in</span><span class="cs-time-val">4 wks</span></div>
+          <div class="cs-result" style="margin-top:20px"><h5>Outcomes</h5><ul><li>73% of queries resolved without humans</li><li>Response time: 4 hrs → under 1 minute</li><li>Support team refocused on complex cases</li><li>Customer satisfaction score improved</li></ul></div>
+        </div>
+      </div>
+      <div class="cs-item">
+        <div>
+          <span class="cs-cat">Manufacturing · ERP</span>
+          <h3>Consolidating four disconnected tools into one custom ERP</h3>
+          <p class="challenge">A manufacturer was using separate tools for production scheduling, inventory, quality control, and suppliers — with no shared data. Weekly reports were built manually in Excel.</p>
+        </div>
+        <div>
+          <p style="font-size:.85rem;color:var(--white3);line-height:1.75"><strong style="color:var(--white2);display:block;margin-bottom:12px">What we built</strong>A unified ERP with production planning boards, real-time inventory tracking, quality inspection checklists, supplier PO management, and automated weekly reporting.</p>
+        </div>
+        <div>
+          <div class="cs-timeline"><span class="cs-time-label">Delivered in</span><span class="cs-time-val">16 wks</span></div>
+          <div class="cs-result" style="margin-top:20px"><h5>Outcomes</h5><ul><li>Four tools replaced by one system</li><li>Weekly reports now fully automated</li><li>Inventory discrepancies eliminated</li><li>Production planning time cut by 40%</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cta-band"><h2>Your business. Your case study.</h2><p>Every project we take on is a commitment to real, measurable outcomes.</p><div class="cta-btns"><span class="btn-fill" onclick="go('contact')">Start a Project</span><span class="btn-outline" onclick="go('portfolio')">View Portfolio</span></div></div>
+  <footer><div class="ft-grid"><div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>AI-powered software for modern businesses.</p></div><div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS</span></li></ul></div><div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About</span></li><li><span onclick="go('portfolio')">Portfolio</span></li></ul></div><div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div></div><div class="ft-bottom"><span>© 2025 NazeForge</span><span>Privacy · Terms</span></div></footer>
+</div>
+
+
+<!-- ABOUT -->
+<div class="page" id="page-about">
+  <!-- ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+    </div>
+  </div>
+  <div class="about-hero">
+    <span class="s-label">About NazeForge</span>
+    <h1>We build technology that solves real business problems.</h1>
+    <p style="margin-top:20px">We are a software development company focused on building intelligent digital solutions for startups, growing businesses, and enterprises worldwide. Our mission: create software that helps businesses operate more efficiently, scale faster, and deliver better experiences to their customers.</p>
+  </div>
+  <div class="sp-divider"></div>
+  <div style="max-width:1200px;margin:0 auto;padding:80px 24px">
+    <div class="two-col" style="margin-bottom:80px">
+      <div>
+        <span class="s-label">Our Mission</span>
+        <h2 class="s-title">To empower businesses with software that actually works.</h2>
+        <p class="s-body" style="margin-top:16px">We combine strategy, design, engineering, and AI to deliver products that are reliable, secure, and built for long-term success. We don't build MVPs you'll throw away — we build foundations you'll grow on.</p>
+        <p class="s-body" style="margin-top:16px">Founded by engineers frustrated with the gap between what agencies promise and what they deliver — we operate with full transparency, dedicated ownership, and an obsession with shipping things that actually work.</p>
+      </div>
+      <div>
+        <span class="s-label">By the numbers</span>
+        <h2 class="s-title">Results speak louder.</h2>
+        <div style="margin-top:28px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:24px"><div style="font-size:1.6rem;font-weight:700;color:var(--white);letter-spacing:-.03em">150+</div><div style="font-size:.78rem;color:var(--white4);margin-top:6px">Projects delivered</div></div>
+          <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:24px"><div style="font-size:1.6rem;font-weight:700;color:var(--white);letter-spacing:-.03em">40+</div><div style="font-size:.78rem;color:var(--white4);margin-top:6px">AI systems deployed</div></div>
+          <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:24px"><div style="font-size:1.6rem;font-weight:700;color:var(--white);letter-spacing:-.03em">12+</div><div style="font-size:.78rem;color:var(--white4);margin-top:6px">Industries served</div></div>
+          <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:24px"><div style="font-size:1.6rem;font-weight:700;color:var(--white);letter-spacing:-.03em">98%</div><div style="font-size:.78rem;color:var(--white4);margin-top:6px">Client retention</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="s-head tc"><span class="s-label">Core Values</span><h2 class="s-title">What we stand for.</h2></div>
+    <div class="values-grid">
+      <div class="val-card"><h4>Transparency</h4><p>No surprises. Clear timelines, honest scoping, and weekly progress — from kickoff to launch.</p></div>
+      <div class="val-card"><h4>Quality</h4><p>We don't ship code we're not proud of. Every system is built to production standards from day one.</p></div>
+      <div class="val-card"><h4>Client Success</h4><p>Our job isn't done at delivery. We measure success by the outcomes our software creates for your business.</p></div>
+      <div class="val-card"><h4>Innovation</h4><p>AI-first thinking built into every engagement. We stay ahead so our clients don't have to.</p></div>
+      <div class="val-card"><h4>Accountability</h4><p>We own our work, our timelines, and our mistakes. One team, one point of contact, full ownership.</p></div>
+      <div class="val-card"><h4>Continuous Improvement</h4><p>We ship, then we improve. Every system gets better over time — we're partners, not project vendors.</p></div>
+    </div>
+  </div>
+  <div class="team-strip">
+    <div class="team-inner">
+      <div class="s-head tc"><span class="s-label">The Team</span><h2 class="s-title">Built by people who've done this before.</h2><p class="s-body">Our core team brings experience across enterprise software, AI systems, and growth-stage startups.</p></div>
+      <div class="team-grid">
+        <div class="team-card"><div class="av">Z</div><div class="t-name">Zeesha Nadir</div><div class="t-role">Founder &amp; CEO</div><div class="t-bio">Visionary entrepreneur with a passion for building technology that solves real business problems. Founded NazeForge to bridge the gap between great software and businesses that need it.</div></div>
+        <div class="team-card"><div class="av">Z</div><div class="t-name">Zoya Akbar</div><div class="t-role">Head of AI Engineering</div><div class="t-bio">Former ML engineer at a FinTech unicorn. Specializes in LLM systems, autonomous agents, and production AI.</div></div>
+        <div class="team-card"><div class="av">H</div><div class="t-name">Hassan Jahanzeb</div><div class="t-role">Head of Product &amp; Design</div><div class="t-bio">Designed products used by millions. Believes great software starts with understanding the person who will use it.</div></div>
+        <div class="team-card"><div class="av">M</div><div class="t-name">Manahil Farooq</div><div class="t-role">Client Success Director</div><div class="t-bio">Ensures every engagement runs smoothly — from kickoff to long-term support. Your main point of contact.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="cta-band"><h2>Want to work with us?</h2><p>Whether you're building something new or fixing something broken — we'd love to hear about it.</p><div class="cta-btns"><span class="btn-fill" onclick="go('contact')">Get in Touch</span><span class="btn-outline" onclick="go('portfolio')">See Our Work</span></div></div>
+  <footer><div class="ft-grid"><div class="ft-brand"><span style="font-size:.95rem;font-weight:600;color:var(--white)">NazeForge</span><p>AI-powered software for modern businesses.</p></div><div class="ft-col"><h5>Services</h5><ul><li><span onclick="go('ai')">AI Agents</span></li><li><span onclick="go('custom')">Custom Software</span></li><li><span onclick="go('saas')">SaaS</span></li><li><span onclick="go('portals')">Portals</span></li><li><span onclick="go('mobile')">Mobile</span></li></ul></div><div class="ft-col"><h5>Company</h5><ul><li><span onclick="go('about')">About</span></li><li><span onclick="go('portfolio')">Portfolio</span></li><li><span onclick="go('casestudies')">Case Studies</span></li></ul></div><div class="ft-col"><h5>Contact</h5><ul><li><a href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></li><li><span onclick="go('contact')">Get a Quote</span></li></ul></div></div><div class="ft-bottom"><span>© 2025 NazeForge</span><span>Privacy · Terms</span></div></footer>
+</div>
+
+
+<!-- CONTACT -->
+<div class="page" id="page-contact">
+  <!-- ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">AI Agents &amp; Automation<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Custom Software Development<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">SaaS Platforms<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Enterprise Portals<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Mobile Applications<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">API &amp; Integrations<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Healthcare Tech<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">FinTech Solutions<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">E-commerce Systems<span class="ticker-sep">·</span></span>
+      <span class="ticker-item">Business Automation<span class="ticker-sep">·</span></span>
+    </div>
+  </div>
+  <div class="contact-wrap">
+    <span class="s-label">Get in touch</span>
+    <h1 style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:700;letter-spacing:-.04em;color:var(--white);margin-bottom:18px;margin-top:12px">Let's talk about your project.</h1>
+    <p style="font-size:1rem;color:var(--white3);margin-bottom:52px;line-height:1.75">Tell us what you're building. We'll respond with a clear scope, timeline, and quote — usually within 24 hours.</p>
+    <div class="form-row">
+      <div class="form-group"><label>Full name</label><input type="text" placeholder="Your name"></div>
+      <div class="form-group"><label>Email address</label><input type="email" placeholder="you@company.com"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Company</label><input type="text" placeholder="Company name"></div>
+      <div class="form-group"><label>Service needed</label><select><option value="">Select...</option><option>AI Agents &amp; Automation</option><option>Custom Software</option><option>SaaS Development</option><option>Enterprise Portal</option><option>Mobile Application</option><option>API &amp; Integrations</option><option>Not sure — help me decide</option></select></div>
+    </div>
+    <div class="form-group"><label>Tell us about your project</label><textarea rows="5" placeholder="Describe what you're building, the problem it solves, and any timelines or constraints..."></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Estimated budget</label><select><option value="">Select...</option><option>Under $5,000</option><option>$5,000 – $15,000</option><option>$15,000 – $50,000</option><option>$50,000+</option><option>Prefer to discuss</option></select></div>
+      <div class="form-group"><label>How did you find us?</label><select><option value="">Select...</option><option>Google Search</option><option>LinkedIn</option><option>Referral</option><option>Portfolio</option><option>Other</option></select></div>
+    </div>
+    <div style="padding-top:8px"><button onclick="sendMsg()" style="background:var(--blue2);color:#fff;padding:14px 34px;border-radius:980px;border:none;font-size:.92rem;font-weight:500;font-family:inherit;cursor:pointer" onmouseover="this.style.background='#0077ed'" onmouseout="this.style.background='#0071e3'">Send Message</button></div>
+    <div class="contact-meta">
+      <div><div class="cm-label">Email</div><a class="cm-val" href="mailto:workzeesha@gmail.com">workzeesha@gmail.com</a></div>
+      <div><div class="cm-label">Response time</div><span class="cm-val plain">Within 24 hours</span></div>
+      <div><div class="cm-label">Schedule a call</div><a class="cm-val" href="https://calendly.com/workzeesha/30min" target="_blank">Book 30 minutes →</a></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(60px);background:rgba(255,255,255,.1);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.15);color:var(--white);padding:13px 26px;border-radius:980px;font-size:.85rem;font-weight:500;opacity:0;transition:all .35s;pointer-events:none;z-index:99999;white-space:nowrap">Message sent — we'll be in touch within 24 hours.</div>
+
+<script>
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById('page-'+id);
+  if(el){el.classList.add('active');window.scrollTo(0,0);}
+  closeMega();
+}
+let megaTimer;
+function openMega(id){
+  clearTimeout(megaTimer);
+  document.querySelectorAll('.mega').forEach(m=>m.classList.remove('open'));
+  const el=document.getElementById('mega-'+id);
+  if(el)el.classList.add('open');
+}
+function keepMega(id){clearTimeout(megaTimer);}
+function closeMega(){
+  megaTimer=setTimeout(()=>{document.querySelectorAll('.mega').forEach(m=>m.classList.remove('open'));},120);
+}
+function sendMsg(){
+  const t=document.getElementById('toast');
+  t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(60px)';},3500);
+}
+window.addEventListener('scroll',closeMega,{passive:true});
+function toggleTheme(){
+  const body=document.body;
+  const isLight=body.classList.toggle('light');
+  const icon=document.getElementById('theme-btn').querySelector('.t-icon');
+  const label=document.getElementById('theme-label');
+  if(isLight){icon.textContent='☀️';label.textContent='Light';}
+  else{icon.textContent='🌙';label.textContent='Dark';}
+  try{localStorage.setItem('naze-theme',isLight?'light':'dark');}catch(e){}
+}
+// Load saved theme on startup
+(function(){
+  try{
+    const saved=localStorage.getItem('naze-theme');
+    if(saved==='light'){
+      document.body.classList.add('light');
+      // Icon will be set after DOM loads
+    }
+  }catch(e){}
+})();
+window.addEventListener('DOMContentLoaded',function(){
+  try{
+    const saved=localStorage.getItem('naze-theme');
+    const btn=document.getElementById('theme-btn');
+    if(btn && saved==='light'){
+      btn.querySelector('.t-icon').textContent='☀️';
+      document.getElementById('theme-label').textContent='Light';
+    }
+  }catch(e){}
+});
+function toggleMobileNav(){
+  const nav=document.getElementById('mobile-nav');
+  const overlay=document.getElementById('mob-overlay');
+  const btn=document.getElementById('hamburger');
+  const isOpen=nav.classList.toggle('open');
+  if(overlay) overlay.classList.toggle('open',isOpen);
+  btn.classList.toggle('open');
+  document.body.style.overflow=isOpen?'hidden':'';
+  // reset accordions on close
+  if(!isOpen){
+    document.querySelectorAll('.mob-sub').forEach(s=>s.classList.remove('open'));
+    document.querySelectorAll('.mob-arrow').forEach(a=>{a.style.transform='';a.style.color=''});
+  }
+}
+function toggleMobSub(id){
+  const sub=document.getElementById(id);
+  const key=id.replace('sub-','');
+  const arrow=document.getElementById('arrow-'+key);
+  const isOpen=sub.classList.toggle('open');
+  if(arrow){
+    arrow.style.transform=isOpen?'rotate(90deg)':'';
+    arrow.style.color=isOpen?'var(--blue)':'';
+  }
+}
+</script>
+
+
+<!-- FLOATING THEME TOGGLE -->
+<button class="theme-toggle" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">
+  <span class="t-icon">🌙</span>
+  <span class="t-label" id="theme-label">Dark</span>
+</button>
+
+<!-- MOBILE NAV OVERLAY -->
+<div class="mob-overlay" id="mob-overlay" onclick="toggleMobileNav()"></div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobile-nav">
+  <!-- Header -->
+  <div class="mob-header">
+    <span class="mob-logo">NazeForge</span>
+    <div class="mob-close" onclick="toggleMobileNav()">✕</div>
+  </div>
+
+  <!-- Nav List -->
+  <div class="mob-list">
+    <div class="mob-nav-item">
+      <span onclick="go('home');toggleMobileNav()">Home</span>
+    </div>
+
+    <!-- Services accordion -->
+    <div class="mob-nav-item">
+      <span onclick="toggleMobSub('sub-services')">
+        Services
+        <span class="mob-arrow" id="arrow-services">›</span>
+      </span>
+      <div class="mob-sub" id="sub-services">
+        <div class="mob-sub-head">Core Services</div>
+        <span class="mob-sub-link" onclick="go('ai');toggleMobileNav()"><span class="mob-sub-dot"></span>AI Agents &amp; Automation</span>
+        <span class="mob-sub-link" onclick="go('custom');toggleMobileNav()"><span class="mob-sub-dot"></span>Custom Software Development</span>
+        <span class="mob-sub-link" onclick="go('saas');toggleMobileNav()"><span class="mob-sub-dot"></span>SaaS Development</span>
+        <div class="mob-sub-head">Platforms &amp; Apps</div>
+        <span class="mob-sub-link" onclick="go('portals');toggleMobileNav()"><span class="mob-sub-dot"></span>Enterprise Portals</span>
+        <span class="mob-sub-link" onclick="go('mobile');toggleMobileNav()"><span class="mob-sub-dot"></span>Mobile Applications</span>
+        <span class="mob-sub-link" onclick="go('api');toggleMobileNav()"><span class="mob-sub-dot"></span>API &amp; Integrations</span>
+      </div>
+    </div>
+
+    <!-- Industries accordion -->
+    <div class="mob-nav-item">
+      <span onclick="toggleMobSub('sub-industries')">
+        Industries
+        <span class="mob-arrow" id="arrow-industries">›</span>
+      </span>
+      <div class="mob-sub" id="sub-industries">
+        <div class="mob-sub-head">Sectors</div>
+        <span class="mob-sub-link"><span class="mob-sub-dot"></span>Healthcare &amp; Life Sciences</span>
+        <span class="mob-sub-link"><span class="mob-sub-dot"></span>Finance &amp; Legal</span>
+        <span class="mob-sub-link"><span class="mob-sub-dot"></span>Commerce &amp; Logistics</span>
+        <span class="mob-sub-link"><span class="mob-sub-dot"></span>Education &amp; Enterprise</span>
+      </div>
+    </div>
+
+    <div class="mob-nav-item">
+      <span onclick="go('portfolio');toggleMobileNav()">Portfolio</span>
+    </div>
+    <div class="mob-nav-item">
+      <span onclick="go('casestudies');toggleMobileNav()">Case Studies</span>
+    </div>
+    <div class="mob-nav-item">
+      <span onclick="go('about');toggleMobileNav()">About Us</span>
+    </div>
+    <div class="mob-nav-item">
+      <span onclick="go('contact');toggleMobileNav()">Contact</span>
+    </div>
+  </div>
+
+  <!-- Fixed bottom CTA -->
+  <div class="mob-footer">
+    <a class="mob-cta-fill" href="https://calendly.com/workzeesha/30min" target="_blank">Schedule a Call</a>
+    <span class="mob-cta-outline" onclick="go('contact');toggleMobileNav()">Get a Quote</span>
+  </div>
+</div>
+
+</body>
+</html>
